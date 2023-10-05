@@ -3,16 +3,18 @@ package med.voll.api.domain.consulta;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import med.voll.api.domain.ValidacaoException;
+import med.voll.api.domain.consulta.validacao.ValidadorAgendamentoDeConsulta;
+import med.voll.api.domain.consulta.validacao.cancelamento.ValidadorCancelamentoDeConsulta;
 import med.voll.api.domain.medico.Medico;
 import med.voll.api.domain.medico.MedicoRepository;
 import med.voll.api.domain.paciente.PacienteRepository;
-import validacao.agendamento.ValidadorAgendamentoDeConsulta;
-import validacao.cancelamento.ValidadorCancelamentoDeConsulta;
 
 @Service
+@Component
 public class AgendaDeConsulta {
 
     @Autowired
@@ -24,10 +26,10 @@ public class AgendaDeConsulta {
     @Autowired
     private PacienteRepository pacienteRepository;
 
-    @Autowired
+    
     private List<ValidadorAgendamentoDeConsulta> validadores;
 
-    @Autowired
+    
     private List<ValidadorCancelamentoDeConsulta> validadoresCancelamento;
 
     public DadosDetalhamentoConsulta agenda(DadosAgendamentoConsulta dados) {
@@ -64,7 +66,6 @@ public class AgendaDeConsulta {
         consulta.cancelar(dados.motivo());
     }
 
-
     private Medico escolherMedico(DadosAgendamentoConsulta dados) {
         if (dados.idMedico() != null) {
             return medicoRepository.getReferenceById(dados.idMedico());
@@ -76,5 +77,4 @@ public class AgendaDeConsulta {
 
         return medicoRepository.escolherMedicoAleatorioLivreNaData(dados.especialidade(), dados.data());
     }
-
 }
